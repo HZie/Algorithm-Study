@@ -1,23 +1,22 @@
 // https://leetcode.com/problems/find-peak-element/
-// REVIEWING
+// reviewd: 3
 // medium
 // try to use binary search and to make it better
 class Solution { 
 
-    public int binarySearch(int[] nums, int l, int r){
-        int mid = (l+r) / 2;
-        int result  = 0;
-        if(nums[mid] == nums[l] || nums[mid] == nums[r])
-            return mid;
-        else if(nums[mid] < nums[l])
-            result = binarySearch(nums, l, mid);
-        else
-            result = binarySearch(nums,mid,r);
-        return result;
-    }
+    public int findPeakElement(int[] nums) {
+        int l = 0; int r = nums.length - 1;
+        int mid;
 
-    public int findPeakElement(int[] nums) {      
-       return binarySearch(nums,0,nums.length - 1);
+        while(l < r){
+            mid = (l+r)/2;
+            if(nums[mid] > nums[mid+1])
+                r = mid;
+            else
+                l = mid + 1;
+        }
+
+        return l;
         /* for(int i = 0; i < nums.length; i++){
             if( i == 0 && i == nums.length - 1)
                 return i;
