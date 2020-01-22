@@ -28,10 +28,10 @@ class Solution {
         tail.next = head;
         
         ListNode node = tail;
-        if(rotation != 0){
-            for(int i = 0; i < count - rotation; i++)    // 마지막 노드가 될 노드를 찾음
-                node = node.next;
-        }
+        
+        for(int i = 0; i < count - rotation; i++)    // 마지막 노드가 될 노드를 찾음
+            node = node.next;
+        
         
         // tail을 만들어줌으로써 singly linked list
         head = node.next;
