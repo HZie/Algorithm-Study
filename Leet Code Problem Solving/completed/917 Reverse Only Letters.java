@@ -36,6 +36,7 @@ class Solution {
         if(((int)ch >= (int)'A' && (int)ch <= (int)'Z') ||
               ((int)ch >= (int)'a' && (int)ch <= (int)'z'))
             return true;
+            
         return false;
     }
 }
