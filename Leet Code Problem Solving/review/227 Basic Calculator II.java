@@ -1,7 +1,117 @@
 // https://leetcode.com/problems/basic-calculator-ii/
 // Medium
-// uncomplete. Recognize 42 as '4' and '2' <-- have to solve it
+// try to make it faster
 
+import java.util.*;
+
+class Solution{    
+    public int calculate(String s) {
+        ArrayList<String> str = new ArrayList<String>();
+        Stack<String> opStack = new Stack<String>();
+
+        
+        int num = 0;
+            
+        for(int i = 0; i < s.length(); i++){
+            char strChar = s.charAt(i);
+            if(strChar >= '0' && strChar <= '9'){
+            	num = num*10 + (int)(strChar - '0');
+            }
+            else if(strChar == '+' || strChar == '-' ||
+                   strChar == '/' || strChar == '*'){
+                str.add(String.valueOf(num));
+                num = 0;
+                char op = strChar;
+                
+                if(opStack.empty()){
+                    opStack.push(op+"");
+                }
+                else{
+                    switch(op){
+                        case '*':
+                        case '/':
+                            if(opStack.peek().equals("*") || opStack.peek().equals("/")){
+                                str.add(opStack.pop());
+                                opStack.push(op+"");
+                            }
+                            else{
+                                opStack.push(op+"");
+                            }
+                            break;
+                        case '+':
+                        case '-':
+                        		while(!opStack.empty()) {
+                        			str.add(opStack.pop());
+                        		}
+                                opStack.push(op+"");
+                            break;
+                        default:
+                            break;   
+                    }
+                }
+                
+            }
+            
+            if( i == s.length()-1)
+                str.add(String.valueOf(num));
+        }
+        
+        while(!opStack.empty()){
+            str.add(opStack.pop());
+        }
+        
+        int num1 = -1;
+        int num2 = -1;
+        
+        
+        // 3*3+2 --> 33*2+
+        // 3+3+2 --> 33+2+
+        // 3+3*2 --> 332*+
+        Stack<Integer> numStack = new Stack<Integer>();
+        
+        for(int i = 0; i < str.size(); i++){
+            String parsedStr = str.get(i);
+            if( !parsedStr.equals("+") && !parsedStr.equals("-") &&
+              !parsedStr.equals("/") && !parsedStr.equals("*")){
+                numStack.push(Integer.parseInt(parsedStr));
+            }
+            else{
+
+                num2 = numStack.pop();
+                num1 = numStack.pop();
+
+
+                char op = parsedStr.charAt(0);
+                switch(op){
+                    case '+':
+                        num2 = num1+num2;
+                        break;
+                    case '-':
+                        num2 = num1-num2;
+                        break;
+                    case '*':
+                        num2 = num1*num2;
+                        break;
+                    case '/':
+                        num2 = num1/num2;
+                        break;
+                    default:
+                        break;
+                }
+                numStack.push(num2);
+            }
+
+        }
+        
+        if(!numStack.empty()) {
+        	return numStack.pop();
+        }
+        return num2;
+    }
+}
+
+
+/*
 import java.util.*;
 
 class customStack{
@@ -136,4 +246,5 @@ class Solution {
         return (int)(stack.pop()-'0');
         
     }
+*/
 }
