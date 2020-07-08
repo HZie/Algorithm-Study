@@ -1,11 +1,14 @@
+// if grid[m][n]
+// time complexity: O(mn)
+// space complexity: O(1)
 class Solution {
     public void dfs(int i, int j){
         
     }
     public int islandPerimeter(int[][] grid) {
         int count = 0;
-        for(int i = 0; i < grid.length; i++){
-            for(int j = 0; j < grid[i].length; j++){
+        for(int i = 0; i < grid.length; i++){  
+            for(int j = 0; j < grid[i].length; j++){ 
                 int cellPer = 0;
                 if(grid[i][j] == 1){
                     cellPer = 4;
