@@ -13,8 +13,49 @@
  *     }
  * }
  */
+
+ // 다른 사람 코드
+class Solution {
+    public int widthOfBinaryTree(TreeNode root) {
+        
+        List<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        int max = 0;
+        while(! q.isEmpty()){
+            int n = q.size();
+            
+            if(n > max) max = n;
+            
+            for(int i=0; i<n; i++){
+                TreeNode tn = q.remove(0);
+                
+                if(tn != null){
+                    q.add(tn.left);
+                    q.add(tn.right);
+                }else{
+                    q.add(null);
+                    q.add(null);
+                }
+            }
+            
+            // trim the queue from left
+            while(!q.isEmpty() && q.get(0) == null){
+                q.remove(0);
+            }
+            // trim the queue from right
+            while(!q.isEmpty() && q.get(q.size()-1) == null){
+                q.remove(q.size()-1);
+            }
+        }
+        
+        return max;
+    }
+}
+
+
 // 최대 넓이를 구하지 못했다.
 // 그렇게 하기 위해서는 처음노드와 끝 노드의 위치를 안 다음에 계산해야할 것 같다.
+/*
 class Solution {
     public int widthOfBinaryTree(TreeNode root) {
         Queue<TreeNode> q = new LinkedList<TreeNode>();
@@ -54,3 +95,5 @@ class Solution {
         return ans;
     }
 }
+
+*/
