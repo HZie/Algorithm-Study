@@ -1,4 +1,150 @@
+
+
+
 // 카카오 테크 블로그에서 설명해준 바에 따르면 Trie 자료 구조를 사용하면 되는 듯 하다
+// trie를 썼다. 효율성 테스트 12는 이제 통과 하는데 3,4,5가 통과되지 않는다
+// 아무래도 arraylist 때문인 것 같다.
+import java.util.*;
+
+class Solution {
+    public int[] solution(String[] words, String[] queries) {
+        int[] answer = new int[queries.length];
+        Trie trie = new Trie();
+        for(int i = 0; i < words.length; i++) {
+        	trie.add(words[i]);
+        }
+        
+        for(int i = 0; i < queries.length; i++) {
+        	if(queries[i].startsWith("?")) {
+        		answer[i] = trie.contains(queries[i], true);
+        	}
+        	else {
+        		answer[i] = trie.contains(queries[i], false);
+        	}
+        	
+        }
+        
+        return answer;
+    }
+    
+    
+}
+
+class TrieNode{
+    private HashMap<Character, TrieNode> children = new HashMap<>();
+    private boolean isLastChar;
+    private ArrayList<Integer> restLength = new ArrayList<>();
+    
+    public HashMap<Character,TrieNode> getChildren(){ return this.children; }
+    public ArrayList<Integer> getRestLength(){ return this.restLength; }
+    
+    public boolean isLastChar(){ return this.isLastChar; }
+    public void setIsLastChar(boolean isLastChar){ this.isLastChar = isLastChar; }
+}
+
+class Trie{
+    private TrieNode root;
+    private TrieNode revRoot;
+    Trie(){ 
+        root = new TrieNode();
+        revRoot = new TrieNode();
+    }
+    
+    public void add(String word){
+        TrieNode curr = root;
+        HashMap<Character, TrieNode> children = curr.getChildren();
+        
+        for(int i = 0; i < word.length() ; i++){
+            char c = word.charAt(i);
+            if(!children.containsKey(c)){
+                curr = new TrieNode();
+                children.put(c, curr);
+            }
+            else{
+                curr = children.get(c);
+            }
+            curr.getRestLength().add(word.substring(i+1).length());
+            children = curr.getChildren();
+        }
+        curr.setIsLastChar(true);
+        
+        curr = revRoot;
+        children = curr.getChildren();
+        for(int i = word.length()-1; i >= 0 ; i--){
+            char c = word.charAt(i);
+            if(!children.containsKey(c)){
+                curr = new TrieNode();
+                children.put(c, curr);
+            }
+            else{
+                curr = children.get(c);
+            }
+            curr.getRestLength().add(word.substring(0,i).length());
+            children = curr.getChildren();
+        }
+        curr.setIsLastChar(true);
+        
+        
+    }
+    
+    public int contains(String word, boolean reverse){
+    	TrieNode curr;
+        if(reverse) {
+        	curr = revRoot;
+            int count = 0;
+            
+            for(int i = word.length()-1; i >= 0; i--){
+                char c = word.charAt(i);
+                if(c == '?'){
+                    count = 0;
+                    int rest = word.substring(0,i+1).length();
+                    for(int len : curr.getRestLength()){
+                        if(len == rest)
+                            count++;
+                    }
+                    return count;
+                }
+                TrieNode node = curr.getChildren().get(c);
+                
+                if(node == null)
+                    return count;
+                
+                curr = node;
+            }
+            return count;
+        }
+        
+        else {
+        	curr = root;
+            int count = 0;
+            
+            for(int i = 0; i < word.length(); i++){
+                char c = word.charAt(i);
+                if(c == '?'){
+                    count = 0;
+                    int rest = word.substring(i).length();
+                    for(int len : curr.getRestLength()){
+                        if(len == rest)
+                            count++;
+                    }
+                    return count;
+                }
+                TrieNode node = curr.getChildren().get(c);
+                
+                if(node == null)
+                    return count;
+                
+                curr = node;
+            }
+            return count;
+        }
+    }
+        	
+
+    
+    
+}
+
 
 
 /*
