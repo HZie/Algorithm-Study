@@ -33,7 +33,7 @@ void merge(int[] array, int[] helper, int low, int middle, int high){
     while(left <= middle && right <= high){
 
         // 아래 if/else 부분이 정렬 핵심 (이 경우 오름차순)
-        if(helper[left] <= helper[right]){
+        if(compareRule(helper[left], helper[right])){
             array[curr] = helper[left];
             left++;
         }
@@ -52,6 +52,10 @@ void merge(int[] array, int[] helper, int low, int middle, int high){
         curr++;
         left++;
     }
+}
 
-
+boolean compareRule(int left, int right){
+    if(left <= right)
+        return true;
+    return false;
 }
