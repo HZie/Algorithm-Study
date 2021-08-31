@@ -1,0 +1,26 @@
+import java.util.*;
+
+class Solution {
+    public int solution(int[] priorities, int location) {
+        int answer = 1;
+        PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
+        
+        for(int temp:priorities){
+            pq.add(temp);
+        }
+        
+        while(!pq.isEmpty()){
+            for(int i = 0; i < priorities.length; i++){
+                if(priorities[i] == pq.peek()){
+                    if(i == location)
+                        return answer;
+                    
+                    pq.poll();
+                    answer++;
+                }
+            }
+        }
+        
+        return answer;
+    }
+}
