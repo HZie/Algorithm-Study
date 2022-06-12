@@ -141,3 +141,34 @@ class Solution{
     return answer;
   }
 }
+
+// Solve it again
+
+public Solution{
+  public List<List<Integer>> threeSum(int[] nums){
+    ArrayList<List<Integer>> answer = new ArrayList<>();
+    Arrays.sort(nums);
+
+    for(int i = 0; i < nums.length; i++){
+      if(i-1 > 0 && nums[i-1] == nums[i])
+        continue;
+
+      HashSet<Integer> seen = new HashSet<>();
+      for(int j = i+1; j < nums.length; j++){
+        int comp = -nums[i]-nums[j];
+
+        if(seen.contains(comp)){
+          answer.add(Arrays.asList(nums[i],nums[j], comp));
+          
+          while(j + 1 < nums.length && nums[j] == nums[j+1])
+            j++;
+        }
+        seen.add(nums[j]);
+      }
+    }
+    return answer;
+  }
+
+
+
+}
