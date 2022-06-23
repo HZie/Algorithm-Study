@@ -1,3 +1,5 @@
+import java.util.*;
+
 class Solution {
   public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
 HashMap<String, Double> map = new HashMap<>();
@@ -43,4 +45,78 @@ ans[i] = res;
 return ans;
 
   }
+}
+
+
+class Solution {
+    // using graph → each pair is a path, val is a weight
+  public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries){
+    double[] ans = new double[queries.size()];
+    HashSet<String> variables = new HashSet<>();
+    HashMap<String, Double> weightMap = new HashMap<>();
+  for(int i = 0;  i < equations.size(); i++){
+    String start = equations.get(i).get(0);
+    String end = equations.get(i).get(1);
+
+    variables.add(start);
+    variables.add(end);
+
+    weightMap.put(start+"/"+end, values[i]);
+    weightMap.put(end+"/"+start, 1/values[i]);
+  }
+
+  for(int i = 0; i < queries.size(); i++){
+    String start = queries.get(i).get(0);
+    String dest = queries.get(i).get(1);
+    // variable not exists
+    if(!variables.contains(start) || !variables.contains(dest)){
+      ans[i] = -1.0;
+      continue;
+  }
+  HashSet<String> visit = new HashSet<>();
+  ans[i] = findPath(variables, weightMap, visit, start, dest);
+  }
+
+  return ans;
+
+  }
+
+  // BFS
+  public double findPath(HashSet<String> variables, HashMap<String, Double> weightMap, HashSet<String> visit, String start, String dest){
+    String originalKey = start+"/"+dest;
+
+    if(weightMap.containsKey(originalKey)){
+      return weightMap.get(originalKey);
+    }
+    visit.add(start);
+    Queue<String> q = new LinkedList<>();
+    Queue<Double> weightQ = new LinkedList<>();
+    q.add(start);
+    weightQ.add(1.0);
+
+    while(!q.isEmpty()){
+      double calc = weightQ.poll();
+      String s = q.poll();
+    // do something
+
+      String key = s+"/"+dest;
+      if(weightMap.containsKey(key)){
+        calc *= weightMap.get(key);
+        weightMap.put(originalKey, calc);
+        return calc;
+      }
+
+      for(String v: variables){
+        key = s + "/" + v;
+        if(weightMap.containsKey(key) && !visit.contains(v)){
+          visit.add(v);
+          q.add(v);
+          weightQ.add(calc*weightMap.get(key));
+        }
+      } 
+    }
+    
+    return -1.0;
+  }
+
 }
