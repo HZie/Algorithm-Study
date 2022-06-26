@@ -4,7 +4,7 @@ class TrieNode{
   boolean terminate;
 
   public TrieNode(){
-    children = new HashMap<>();
+    this.children = new HashMap<>();
   }
 
   public TrieNode(char c){
@@ -95,7 +95,7 @@ public class Trie {
     if(nextNode == null)
       return false;
 
-      // remove 해도 되고, nextNode가 end가 아니면 다음 노드를 삭제함
+      // remove 해도 되고, nextNode가 end이면 다음 노드를 삭제함
     if(remove(nextNode, word, index) && nextNode.isEnd()){
       node.children.remove(word.charAt(index));
       return node.children.isEmpty();
@@ -106,7 +106,8 @@ public class Trie {
 
   public void add(String word){
     TrieNode prev = root, node = root;
-    for(int i = 0; i < word.length(); i++){
+    int i;
+    for(i = 0; i < word.length(); i++){
       prev = node;
       node = node.getChild(word.charAt(i));
       if(node ==  null){
